@@ -1,0 +1,21 @@
+<template>
+  <require from="./scss/styles.css"></require>
+  <require from="./components/contact-list"></require>
+
+  <loading-indicator style="margin: auto" loading.bind="router.isNavigating || api.isRequesting"></loading-indicator>
+
+  <div class="container">
+    <div class="row"> 
+      <div class="col-md-4 text-center">
+          <a class="navbar-brand" href="#">
+              <i class="fa fa-user"></i>
+              <span>Contacts</span>
+            </a>
+      </div>
+    </div>
+    <div class="row">
+      <contact-list class="col-md-4"></contact-list>
+      <router-view class="col-md-8"></router-view>
+    </div>
+  </div>
+</template>
