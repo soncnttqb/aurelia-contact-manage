@@ -21,6 +21,7 @@ const baseUrl = '/';
 
 const cssRules = [
   { loader: 'css-loader' },
+  { loader: "sass-loader" }
 ];
 
 module.exports = ({production, server, extractCss, coverage, analyze} = {}) => ({
@@ -52,8 +53,8 @@ module.exports = ({production, server, extractCss, coverage, analyze} = {}) => (
       // CSS required in JS/TS files should use the style-loader that auto-injects it into the website
       // only when the issuer is a .js/.ts file, so the loaders are not applied inside html templates
       {
-        test: /\.css$/i,
-        issuer: [{ not: [{ test: /\.html$/i }] }],
+        test: /\.scss$/i,
+        //issuer: [{ not: [{ test: /\.html$/i }] }],
         use: extractCss ? ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: cssRules

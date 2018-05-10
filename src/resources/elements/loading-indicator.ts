@@ -1,6 +1,6 @@
 import * as nprogress from 'nprogress';
     import {bindable, noView, PLATFORM} from 'aurelia-framework';
-    import 'nprogress/nprogress.css';
+    import '../../scss/nprogress.scss';
 
     @noView
     export class LoadingIndicator {
