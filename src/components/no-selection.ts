@@ -1,8 +1,8 @@
-import {inject} from 'aurelia-framework';
+import {autoinject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {ContactViewed} from '../utils/messages';
 
-@inject(EventAggregator)
+@autoinject
 export class NoSelection {
   private message : string;
   
