@@ -1,96 +1,54 @@
-let latency = 200;
+import { resolve } from 'path';
+import { Contact } from './../models/contact';
+
 let id = 0;
 
-function getId(){
+function getId() : number{
   return ++id;
 }
 
-let contacts = [
-  {
-    id:getId(),
-    firstName:'John',
-    lastName:'Tolkien',
-    email:'tolkien@inklings.com',
-    phoneNumber:'867-5309'
-  },
-  {
-    id:getId(),
-    firstName:'Clive',
-    lastName:'Lewis',
-    email:'lewis@inklings.com',
-    phoneNumber:'867-5309'
-  },
-  {
-    id:getId(),
-    firstName:'Owen',
-    lastName:'Barfield',
-    email:'barfield@inklings.com',
-    phoneNumber:'867-5309'
-  },
-  {
-    id:getId(),
-    firstName:'Charles',
-    lastName:'Williams',
-    email:'williams@inklings.com',
-    phoneNumber:'867-5309'
-  },
-  {
-    id:getId(),
-    firstName:'Roger',
-    lastName:'Green',
-    email:'green@inklings.com',
-    phoneNumber:'867-5309'
-  }
+let contacts: Contact[];
+
+contacts = [ 
+  new Contact(getId(), 'John','Tolkien','tolkien@inklings.com','867-5309'),
+  new Contact(getId(), 'Clive','Lewis','lewis@inklings.com','867-5309'), 
+  new Contact(getId(),'Owen','Barfield','barfield@inklings.com','867-5309'),
+  new Contact(getId(),'Charles','Williams','williams@inklings.com','867-5309'),
+  new Contact(getId(),'Roger','Green','bgreen@inklings.com','867-5309')
 ];
 
 export class WebAPI {
-  isRequesting = false;
-  
-  getContactList(){
+  public isRequesting : boolean = false;
+
+  public async getContactList() : Promise<Contact[]>{
     this.isRequesting = true;
-    return new Promise(resolve => {
-      setTimeout(() => {
-        let results = contacts.map(x =>  { return {
-          id:x.id,
-          firstName:x.firstName,
-          lastName:x.lastName,
-          email:x.email
-        }});
-        resolve(results);
-        this.isRequesting = false;
-      }, latency);
+    let results = contacts.map(x=> {
+      return new Contact(x.id,x.firstName, x.lastName,x.email,x.phoneNumber);
     });
+    this.isRequesting = false;
+    return results;
   }
 
-  getContactDetails(id){
+  public async getContactDetails(id) : Promise<Contact>{
     this.isRequesting = true;
-    return new Promise(resolve => {
-      setTimeout(() => {
-        let found = contacts.filter(x => x.id == id)[0];
-        resolve(JSON.parse(JSON.stringify(found)));
-        this.isRequesting = false;
-      }, latency);
-    });
+    const found : Contact = await contacts.filter(x => x.id == id)[0];
+    this.isRequesting = false;
+    return found;
   }
 
-  saveContact(contact){
+  public async saveContact(contact: Contact) : Promise<Contact> {
     this.isRequesting = true;
-    return new Promise(resolve => {
-      setTimeout(() => {
-        let instance = JSON.parse(JSON.stringify(contact));
-        let found = contacts.filter(x => x.id == contact.id)[0];
+    let found = contacts.filter(x=>x.id === contact.id);
+    if(found.length) {
+        let index = contacts.indexOf(found[0]);
+        contacts[index] = contact;
+    }
+    else {
+        contact = new Contact(getId(),contact.firstName, contact.lastName, contact.email, contact.phoneNumber);
+        contacts.push(contact);
+    }
 
-        if(found){
-          let index = contacts.indexOf(found);
-          contacts[index] = instance;
-        }else{
-          instance.id = getId();
-          contacts.push(instance);
-        }
-
-        this.isRequesting = false;
-        resolve(instance);
-      }, latency);
-    });
+    this.isRequesting = false;
+    return contact;
   }
 }

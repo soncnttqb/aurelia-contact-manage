@@ -1,48 +1,42 @@
-import {inject} from 'aurelia-framework';
+import {autoinject, computedFrom} from 'aurelia-framework';
     import {EventAggregator} from 'aurelia-event-aggregator';
     import {WebAPI} from '.././utils/web-api';
     import {ContactUpdated,ContactViewed} from '../utils/messages';
     import {areEqual} from '.././utils/utility';
+    import { Contact } from './../models/contact';
 
-    interface Contact {
-      firstName: string;
-      lastName: string;
-      email: string;
-    }
-
-    @inject(WebAPI, EventAggregator)
+    @autoinject
     export class ContactDetail {
-      routeConfig;
-      contact: Contact;
-      originalContact: Contact;
+      private routeConfig : any;
+      private contact: Contact;
+      private originalContact: Contact;
 
       constructor(private api: WebAPI, private ea: EventAggregator) { }
 
-      activate(params, routeConfig) {
+      private activate(params, routeConfig): void {
         this.routeConfig = routeConfig;
-
-        return this.api.getContactDetails(params.id).then(contact => {
-          this.contact = <Contact>contact;
-          this.routeConfig.navModel.setTitle(this.contact.firstName);
-          this.originalContact = JSON.parse(JSON.stringify(this.contact));
-          this.ea.publish(new ContactViewed(this.contact));
+         this.api.getContactDetails(params.id).then(contact => {
+         this.contact = new Contact(contact.id, contact.firstName,contact.lastName, contact.email, contact.phoneNumber);
+         this.routeConfig.navModel.setTitle(this.contact.firstName);
+         this.originalContact =  new Contact(contact.id, contact.firstName,contact.lastName, contact.email, contact.phoneNumber);
         });
       }
 
-      get canSave() {
-        return this.contact.firstName && this.contact.lastName && !this.api.isRequesting;
+      @computedFrom('contact.firstName','contact.lastName', 'api.isRequesting')
+      get canSave() : boolean {
+        return this.contact && this.contact.firstName && this.contact.lastName && !this.api.isRequesting;
       }
 
-      save() {
+      private save() : void {
         this.api.saveContact(this.contact).then(contact => {
-          this.contact = <Contact>contact;
+          Object.assign(this.contact,contact);
           this.routeConfig.navModel.setTitle(this.contact.firstName);
           this.originalContact = JSON.parse(JSON.stringify(this.contact));
           this.ea.publish(new ContactUpdated(this.contact));
         });
       }
 
-      canDeactivate() {
+      private canDeactivate(): boolean {
         if(!areEqual(this.originalContact, this.contact)){
           let result = confirm('You have unsaved changes. Are you sure you wish to leave?');
 
