@@ -12,7 +12,7 @@ export class Contact {
     private _email: string,
     private _phoneNumber
   ) {
-    this.id= _id;
+    this.id = _id;
     this.firstName = _firstName;
     this.lastName = _lastName;
     this.email = _email;
