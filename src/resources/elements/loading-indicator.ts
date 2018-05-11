@@ -1,12 +1,12 @@
 import * as nprogress from 'nprogress';
-    import {bindable, noView, PLATFORM} from 'aurelia-framework';
-    import '../../scss/nprogress.scss';
+import {bindable, noView, PLATFORM} from 'aurelia-framework';
+import '../../scss/nprogress.scss';
 
-    @noView
+@noView
     export class LoadingIndicator {
-      @bindable loading = false;
+      @bindable public loading = false;
 
-      loadingChanged(newValue) {
+      public loadingChanged(newValue) {
         if (newValue) {
           nprogress.start();
         } else {
@@ -14,4 +14,3 @@ import * as nprogress from 'nprogress';
         }
       }
     }
-  

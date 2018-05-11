@@ -2,17 +2,17 @@ import {Router, RouterConfiguration} from 'aurelia-router';
 import {autoinject, PLATFORM} from 'aurelia-framework';
 import {WebAPI} from './utils/web-api';
 
-    @autoinject
+@autoinject
     export class App {
-      router: Router;
+      public router: Router;
 
-      constructor(private api: WebAPI){}
+      constructor(private api: WebAPI) {}
 
-      configureRouter(config: RouterConfiguration, router: Router){
+      public configureRouter(config: RouterConfiguration, router: Router) {
         config.title = 'Contacts';
         config.map([
           { route: '',              moduleId: PLATFORM.moduleName('components/no-selection'),   title: 'Select' },
-          { route: 'contacts/:id',  moduleId: PLATFORM.moduleName('components/contact-detail'), name:'contacts' }
+          { route: 'contacts/:id',  moduleId: PLATFORM.moduleName('components/contact-detail'), name: 'contacts', nav: true, href: '#' }
         ]);
 
         this.router = router;

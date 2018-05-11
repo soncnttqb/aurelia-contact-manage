@@ -6,11 +6,16 @@ export class Contact {
   public phoneNumber: string;
 
   constructor(
-    private _id:number,
+    // tslint:disable-next-line:variable-name
+    private _id: number,
+    // tslint:disable-next-line:variable-name
     private _firstName: string,
+    // tslint:disable-next-line:variable-name
     private _lastName: string,
+    // tslint:disable-next-line:variable-name
     private _email: string,
-    private _phoneNumber
+    // tslint:disable-next-line:variable-name
+    private _phoneNumber: string
   ) {
     this.id = _id;
     this.firstName = _firstName;
