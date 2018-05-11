@@ -8,6 +8,5 @@ export class NoSelection {
 
   constructor(private ea: EventAggregator) {
       this.message = 'Please select a contact';
-      this.ea.publish(new ContactViewed(null));
   }
 }

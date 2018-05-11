@@ -1,5 +1,5 @@
 <template>
-  <require from="./components/contact-list"></require>
+  <require from="./components/contact-list.html"></require>
 
   <loading-indicator style="margin: auto" loading.bind="router.isNavigating || api.isRequesting"></loading-indicator>
 
@@ -13,8 +13,8 @@
       </div>
     </div>
     <div class="row">
-      <contact-list class="col-md-4"></contact-list>
-      <router-view class="col-md-8"></router-view>
+      <contact-list router.bind="router" containerless class="col-md-4"></contact-list>
+      <router-view class="col-md-8" swap-order="after"></router-view>
     </div>
   </div>
 </template>

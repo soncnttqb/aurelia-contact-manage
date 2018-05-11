@@ -22,6 +22,10 @@
       "single"
     ],
     "trailing-comma": false,
-    "eofline": true
+    "eofline": true,
+    "no-shadowed-variable": false,
+    "no-unused-expression": false,
+    "no-trailing-whitespace": false,
+    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
   }
 }

@@ -1,12 +1,12 @@
-<template>
-  <div class="contact-list">
-     <ul class="list-group">
-       <li repeat.for="contact of contacts" class="list-group-item ${contact.id === selectedId ? 'active' : ''}">
-         <a route-href="route: contacts; params.bind: {id:contact.id}" click.delegate="select(contact)">
-           <h4>${contact.firstName} ${contact.lastName}</h4>
-           <p>${contact.email}</p>
-         </a>
-       </li>
-     </ul>
-   </div>
+<template bindable="router">
+  <div class="contact-list col-md-4">
+    <ul class="list-group">
+      <li repeat.for="row of router.navigation" class="list-group-item ${row.isActive ? 'active' : ''}">
+        <a class="nav-link" href.bind="row.href">
+          <h4>${row.settings.contact.firstName} ${row.settings.contact.lastName}</h4>
+           <span>${row.settings.contact.email}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 </template>

@@ -15,14 +15,14 @@ import { Contact } from './../models/contact';
 
       private activate(params, routeConfig): void {
         this.routeConfig = routeConfig;
-        this.api.getContactDetails(params.id).then(contact => {
-        this.contact = new Contact(contact.id, contact.firstName, contact.lastName, contact.email, contact.phoneNumber);
+        const routeContact: Contact = routeConfig.settings.contact;
+
+        this.contact = this.newContact(routeContact);
         this.routeConfig.navModel.setTitle(this.contact.firstName);
-        this.originalContact =  new Contact(contact.id, contact.firstName, contact.lastName, contact.email, contact.phoneNumber);
-        });
+        this.originalContact =  this.newContact(routeContact);
       }
 
-      @computedFrom('contact.firstName','contact.lastName', 'api.isRequesting')
+      @computedFrom('contact.firstName', 'contact.lastName', 'api.isRequesting')
       get canSave(): boolean {
         return this.contact && this.contact.firstName && this.contact.lastName && !this.api.isRequesting;
       }
@@ -32,18 +32,23 @@ import { Contact } from './../models/contact';
           Object.assign(this.contact, contact);
           this.routeConfig.navModel.setTitle(this.contact.firstName);
           this.originalContact = JSON.parse(JSON.stringify(this.contact));
-          this.ea.publish(new ContactUpdated(this.contact));
+          this.routeConfig.settings.contact = this.newContact(contact);
         });
       }
 
+      private newContact(contact: Contact): Contact {
+        return new Contact(
+            contact.id,
+            contact.firstName,
+            contact.lastName,
+            contact.email,
+            contact.phoneNumber);
+      }
+
       private canDeactivate(): boolean {
-        if (!areEqual(this.originalContact, this.contact)){
+        if (!areEqual(this.originalContact, this.contact)) {
           const result = confirm('You have unsaved changes. Are you sure you wish to leave?');
-
-          if (!result) {
-            this.ea.publish(new ContactViewed(this.contact));
-          }
-
+          
           return result;
         }
 
